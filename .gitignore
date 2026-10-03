@@ -1,0 +1,10 @@
+# Build artifacts
+build/
+*.elf
+*.gba
+*.sav
+*.map
+
+# OS / editor cruft
+.DS_Store
+*.swp
