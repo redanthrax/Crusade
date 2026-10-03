@@ -10,6 +10,8 @@ enum {
     TEXT_P1_TUTORIAL_MOVE,
     TEXT_P1_TUTORIAL_HERD,
     TEXT_P1_SCRAP_WARN,
+    TEXT_P1_WAIT,
+    TEXT_P1_LOOTER_FLEES,
     TEXT_P1_OUTRO,
 
     /* Act 1: Bouillon training yard */

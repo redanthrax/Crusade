@@ -1,0 +1,2 @@
+# 16x32 walk frames, tiles kept contiguous per frame (2x4 tile metatiles).
+-gt -gB4 -Mw2 -Mh4 -p -pn16

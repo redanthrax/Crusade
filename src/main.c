@@ -9,10 +9,12 @@
 #include "actor.h"
 #include "audio.h"
 #include "input.h"
+#include "debug.h"
 
 int main(void) {
     irq_init(NULL);
     irq_enable(II_VBLANK);
+    debug_init();
 
     /* Hide all 128 hardware OAM entries: the pool only manages 96, and
      * power-on OAM is zeroed (= visible 8x8 sprites at 0,0). BG0 is
@@ -49,6 +51,15 @@ int main(void) {
 
         ui_clear_all();
 
+#ifdef TEST_CHAPTER
+        /* Playtest build: run only the chapter under test (see Makefile). */
+        if (choice == TITLE_NEW_GAME) g_save.chapterId = TEST_CHAPTER;
+        switch (g_save.chapterId) {
+            case CHAPTER_PRELUDE_1:     prelude1_run(); break;
+            case CHAPTER_ACT1_BOUILLON: act1_bouillon_run(); break;
+            default: break;
+        }
+#else
         if (g_save.chapterId <= CHAPTER_PRELUDE_1) {
             prelude1_run();
             g_save.chapterId = CHAPTER_ACT1_BOUILLON;
@@ -57,6 +68,7 @@ int main(void) {
         if (g_save.chapterId <= CHAPTER_ACT1_BOUILLON) {
             act1_bouillon_run();
         }
+#endif
 
         /* First-playable slice ends here -- Acts 2+ aren't implemented yet. */
         ui_clear_all();

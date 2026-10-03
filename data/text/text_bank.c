@@ -8,29 +8,31 @@
 
 const char *const g_textBank[TEXT_COUNT] = {
     [TEXT_P1_INTRO] =
-        "Jerusalem, after Constantine.\n"
-        "Pilgrims gather at the Holy Sepulchre.",
+        "Jerusalem, in the years after Constantine. "
+        "Pilgrims gather in the courtyard of the Holy Sepulchre.",
     [TEXT_P1_TUTORIAL_MOVE] =
-        "Use the D-pad to walk, B to run.",
+        "D-pad to walk. Hold B to hurry.",
     [TEXT_P1_TUTORIAL_HERD] =
-        "Keep the procession together.\n"
-        "Stragglers draw trouble.",
+        "Lead the procession up to the Anastasis door. "
+        "Keep them close. Stragglers draw trouble.",
     [TEXT_P1_SCRAP_WARN] =
-        "Looters! Shove them off with A --\n"
-        "no need for steel here.",
+        "A cutpurse slips out of the colonnade! "
+        "Get near and press A to shove him off. No need for steel here.",
+    [TEXT_P1_WAIT] =
+        "Not yet. The procession must enter together.",
+    [TEXT_P1_LOOTER_FLEES] =
+        "The cutpurse flees into the crowd.",
     [TEXT_P1_OUTRO] =
-        "The procession reaches the Sepulchre\n"
-        "safely, this time.",
+        "The procession enters the Anastasis, where the tomb of Christ "
+        "is kept. Safe, this time.",
 
     [TEXT_A1_INTRO] =
-        "Bouillon. Years later.\n"
+        "Bouillon. Years later. "
         "Godfrey trains in the yard at dawn.",
     [TEXT_A1_MOTHER] =
-        "\"Strength without devotion is only\n"
-        "violence,\" his mother had taught him.",
+        "Strength without devotion is only violence, my son.",
     [TEXT_A1_DUEL_CHALLENGE] =
-        "A rival retainer steps forward.\n"
-        "\"Let's see what the tutors taught you.\"",
+        "Let's see what the tutors taught you, Godfrey.",
     [TEXT_A1_DUEL_WIN] =
         "Godfrey holds his footing.\n"
         "The yard falls quiet.",

@@ -10,10 +10,12 @@ ROM=crusade.gba
 CFG="$HOME/.config/mgba/config.ini"
 
 # mGBA rewrites config.ini on exit, so (re)assert the aspect settings.
+# videoSync+audioSync: audio caps speed at GBA rate, video sync presents
+# each frame on a display refresh (smooth scrolling on 120 Hz / VM displays).
 mkdir -p "$(dirname "$CFG")"
 touch "$CFG"
 grep -q '^\[ports.qt\]' "$CFG" || printf '[ports.qt]\n' >> "$CFG"
-for kv in lockAspectRatio=1 lockIntegerScaling=1 resampleVideo=0; do
+for kv in lockAspectRatio=1 lockIntegerScaling=1 resampleVideo=0 videoSync=1 audioSync=1; do
     k="${kv%%=*}"
     if grep -q "^$k=" "$CFG"; then
         sed -i "s/^$k=.*/$kv/" "$CFG"

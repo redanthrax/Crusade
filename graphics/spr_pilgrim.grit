@@ -1,0 +1,2 @@
+# 16x32 walk frames; 48-colour palette = 3 robe/mantle variants (banks).
+-gt -gB4 -Mw2 -Mh4 -p -pn48

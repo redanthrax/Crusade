@@ -51,8 +51,10 @@ typedef struct Actor {
     u16 timer;                 /* hitstun frames / attack windup / cooldown */
     u16 scriptId;               /* enemy AI table index or companion assist id */
     s8  oamId;                  /* index into the OAM slot pool, -1 if unused */
-    u8  spare;
-} Actor; /* 28 bytes */
+    u8  sprite;                 /* SpriteId (sprites.h); 0 = placeholder by kind */
+    u8  palVariant;             /* added to the sprite's base OBJ palette bank */
+    u8  animTick;               /* walk-cycle frame counter */
+} Actor; /* 32 bytes incl. padding */
 
 extern Actor g_actors[MAX_ACTORS];
 

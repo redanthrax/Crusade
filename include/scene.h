@@ -28,9 +28,24 @@ typedef enum {
  * entry, so the end sentinel must not collide with it. */
 #define SCENE_END         0xFFFF
 
+/* Who is talking. Selects the text-box style: SPK_NARRATOR gets the
+ * narration band, SPK_HINT a plain framed box, others a framed box with a
+ * name tab from g_speakerNames[]. */
+typedef enum {
+    SPK_NARRATOR = 0,
+    SPK_HINT,
+    SPK_GUIDE,
+    SPK_IDA,
+    SPK_RETAINER,
+    SPK_COUNT
+} SpeakerId;
+
+extern const char *const g_speakerNames[SPK_COUNT];
+
 typedef struct SceneScriptEntry {
     u16 textBankId;      /* index into g_textBank[] */
     u8  portraitId;        /* index into portrait tile set, SCENE_NO_PORTRAIT = none */
+    u8  speakerId;         /* SpeakerId; 0 = narration */
     u8  flagsRequired;      /* SFLAG_* bitmask; 0 = always eligible */
     u16 nextOnDefault;        /* next scriptEntryId to run after this one, or SCENE_END */
     u16 nextOnFlagSet;          /* branch target if all flagsRequired bits are set in

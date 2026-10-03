@@ -25,13 +25,20 @@ typedef struct MapHeader {
     const u16 *tilesetGfx;          /* 4bpp tile gfx (grit-exported or hand-authored) */
     u32 tilesetGfxLen;               /* length of tilesetGfx in u16 units */
     const u16 *tilesetPal;           /* 16-color palette (BGR555) */
+    /* Metatile definitions: a grit flat map of the metatile sheet image
+     * (metaSheetCols metatiles per row, 2x2 screen entries each, flips
+     * included). NULL = legacy convention, metatile id n uses tiles
+     * 4n..4n+3. */
+    const u16 *metaSheetMap;
+    u16 metaSheetCols;
     u16 encounterTableId;            /* index into enemy spawn table, 0 = none */
     u16 scriptEntryId;                /* first scene-script entry run on load, 0 = none */
     u16 bgmId;                        /* Maxmod module id for this map, 0xFFFF = none */
 } MapHeader;
 
 /* Loads a map's BG tiles/palette/metatile layer into VRAM and sets up the
- * collision lookup used by collision.c. Resets the actor pool's non-player
+ * collision lookup used by collision.c. Maps up to 32x32 metatiles fit:
+ * BG0 is sized 32 or 64 tiles per axis to match (SBB 16-19). Resets the actor pool's non-player
  * actors; does not touch SaveData. */
 void map_load(const MapHeader *map);
 

@@ -8,11 +8,11 @@ const SceneScriptEntry g_sceneAct1[SCN_A1_COUNT] = {
         .flagsRequired = 0, .nextOnDefault = SCN_A1_MOTHER, .nextOnFlagSet = SCENE_END
     },
     [SCN_A1_MOTHER] = {
-        .textBankId = TEXT_A1_MOTHER, .portraitId = SCENE_NO_PORTRAIT,
+        .textBankId = TEXT_A1_MOTHER, .portraitId = SCENE_NO_PORTRAIT, .speakerId = SPK_IDA,
         .flagsRequired = 0, .nextOnDefault = SCN_A1_DUEL_CHALLENGE, .nextOnFlagSet = SCENE_END
     },
     [SCN_A1_DUEL_CHALLENGE] = {
-        .textBankId = TEXT_A1_DUEL_CHALLENGE, .portraitId = SCENE_NO_PORTRAIT,
+        .textBankId = TEXT_A1_DUEL_CHALLENGE, .portraitId = SCENE_NO_PORTRAIT, .speakerId = SPK_RETAINER,
         .flagsRequired = 0, .nextOnDefault = SCENE_END, .nextOnFlagSet = SCENE_END
     },
     [SCN_A1_DUEL_WIN] = {

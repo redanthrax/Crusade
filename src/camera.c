@@ -6,6 +6,7 @@ Camera g_camera;
 void camera_reset(s16 mapWidthPx, s16 mapHeightPx) {
     g_camera.x = 0;
     g_camera.y = 0;
+    g_camera.bg = 0;
     g_camera.mapWidthPx = mapWidthPx;
     g_camera.mapHeightPx = mapHeightPx;
 }
@@ -28,7 +29,10 @@ void camera_follow(fx8 targetX, fx8 targetY, int bg) {
 
     g_camera.x = cx;
     g_camera.y = cy;
+    g_camera.bg = (u8)bg;
+}
 
-    REG_BG_OFS[bg].x = FX8_TO_INT(cx);
-    REG_BG_OFS[bg].y = FX8_TO_INT(cy);
+void camera_commit(void) {
+    REG_BG_OFS[g_camera.bg].x = FX8_TO_INT(g_camera.x);
+    REG_BG_OFS[g_camera.bg].y = FX8_TO_INT(g_camera.y);
 }

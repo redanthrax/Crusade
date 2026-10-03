@@ -7,6 +7,7 @@
 #include "oam_pool.h"
 #include "camera.h"
 #include "input.h"
+#include "debug.h"
 #include "fixed.h"
 #include "maps.h"
 #include "map.h"
@@ -66,7 +67,10 @@ void act1_bouillon_run(void) {
     rival->hp = RIVAL_HP;
 
     while (rival->kind != AKIND_NONE) {
-        VBlankIntrWait();
+        vsync_wait();
+        /* Present last frame's scroll + sprites inside VBlank. */
+        camera_commit();
+        oam_pool_flush();
         input_poll();
 
         fx8 speed = key_is_down(KEY_B) ? RUN_SPEED : WALK_SPEED;
@@ -91,7 +95,6 @@ void act1_bouillon_run(void) {
         combat_update();
         camera_follow(player->x, player->y, 0);
         render_actors_to_oam();
-        oam_pool_flush();
     }
 
     scene_run(g_sceneAct1, SCN_A1_DUEL_WIN); /* duel win -> blessing */

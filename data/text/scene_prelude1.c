@@ -8,15 +8,23 @@ const SceneScriptEntry g_scenePrelude1[SCN_P1_COUNT] = {
         .flagsRequired = 0, .nextOnDefault = SCN_P1_TUTORIAL_MOVE, .nextOnFlagSet = SCENE_END
     },
     [SCN_P1_TUTORIAL_MOVE] = {
-        .textBankId = TEXT_P1_TUTORIAL_MOVE, .portraitId = SCENE_NO_PORTRAIT,
+        .textBankId = TEXT_P1_TUTORIAL_MOVE, .portraitId = SCENE_NO_PORTRAIT, .speakerId = SPK_HINT,
         .flagsRequired = 0, .nextOnDefault = SCN_P1_TUTORIAL_HERD, .nextOnFlagSet = SCENE_END
     },
     [SCN_P1_TUTORIAL_HERD] = {
-        .textBankId = TEXT_P1_TUTORIAL_HERD, .portraitId = SCENE_NO_PORTRAIT,
-        .flagsRequired = 0, .nextOnDefault = SCN_P1_SCRAP_WARN, .nextOnFlagSet = SCENE_END
+        .textBankId = TEXT_P1_TUTORIAL_HERD, .portraitId = SCENE_NO_PORTRAIT, .speakerId = SPK_HINT,
+        .flagsRequired = 0, .nextOnDefault = SCENE_END, .nextOnFlagSet = SCENE_END
     },
     [SCN_P1_SCRAP_WARN] = {
-        .textBankId = TEXT_P1_SCRAP_WARN, .portraitId = SCENE_NO_PORTRAIT,
+        .textBankId = TEXT_P1_SCRAP_WARN, .portraitId = SCENE_NO_PORTRAIT, .speakerId = SPK_HINT,
+        .flagsRequired = 0, .nextOnDefault = SCENE_END, .nextOnFlagSet = SCENE_END
+    },
+    [SCN_P1_WAIT] = {
+        .textBankId = TEXT_P1_WAIT, .portraitId = SCENE_NO_PORTRAIT, .speakerId = SPK_GUIDE,
+        .flagsRequired = 0, .nextOnDefault = SCENE_END, .nextOnFlagSet = SCENE_END
+    },
+    [SCN_P1_LOOTER_FLEES] = {
+        .textBankId = TEXT_P1_LOOTER_FLEES, .portraitId = SCENE_NO_PORTRAIT,
         .flagsRequired = 0, .nextOnDefault = SCENE_END, .nextOnFlagSet = SCENE_END
     },
     [SCN_P1_OUTRO] = {

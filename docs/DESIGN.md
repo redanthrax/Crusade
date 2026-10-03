@@ -135,8 +135,8 @@ ending text); Piety is additive narrative content, not a hard combat gate.
 - **Save:** SRAM signature + chapter id + flags bitfield + three tracks.
   See `include/save.h`. SRAM is read/written one byte at a time (8-bit bus),
   never via DMA or struct-cast bulk copy.
-- **Scenes:** script id table (text bank + portrait id + next state). Text
-  rendered in 8x8 font, box at the bottom of the screen. See
+- **Scenes:** script id table (text bank + portrait id + speaker id + next
+  state). Text rendered in 8x8 font, box at the bottom of the screen. See
   `include/scene.h`.
 - **Audio:** one Sepulchre leitmotif, a distorted version for 1009, the
   clean version restored in Act 5. Maxmod `.mod`/`.s3m` tracked modules only
@@ -244,18 +244,31 @@ libtonc's TTE) never clobber each other:
 | Region                     | Charblock | Screenblock |
 |-----------------------------|-----------|-------------|
 | BG0 world tile gfx           | 0         | -           |
-| BG0 world tilemap             | -         | 16          |
-| BG3 font glyph cache (TTE)     | 1         | -           |
+| BG0 world tilemap             | -         | 16 (-19 for 64x64) |
+| BG3 font glyph cache (TTE), tiles 0-95 | 1 | -        |
+| Drop-shadow font copy, tiles 96-191    | 1 | -        |
+| Text-box frame tiles, tiles 192+       | 1 | -        |
+| BG2 text-box panel tilemap       | -         | 29          |
 | BG3 text tilemap                 | -         | 28          |
 
 BG palette bank 0 holds the world tileset; TTE's default font uses bank 15
 (`0xF000` se0 base), so the two never share palette entries either. Banks
-12-14 are menu text colours (disabled / normal / selected). OBJ
+12-14 are menu text colours (disabled / normal / selected). Text-box banks:
+7 name-tab ink, 8 narration panel, 9 dialogue panel, 10 narration ink,
+11 dialogue ink (index 1 ink, index 2 drop shadow). OBJ
 (sprite) VRAM is a separate address range and does not interact with any of
 the above.
 
 BG0 is priority 1 and sprites use priority 1, so the text layer (BG3,
 priority 0) always draws on top.
+
+**Text box** (`src/ui.c`): an opaque panel on BG2 (rows 14-19, name tab on
+row 13) under BG3 text drawn with the drop-shadow font. While open, WIN0
+(box) and WIN1 (tab) show only BG2+BG3, hiding the world and sprites behind
+the text. Each scene entry's `speakerId` picks the style: `SPK_NARRATOR` is
+a dark band with gold rules and centred parchment text; `SPK_HINT` is a navy
+gold-framed box; named speakers add a gold name tab. Text word-wraps to 28
+columns x 4 lines and pages on A, with a blinking advance arrow.
 
 **Title/menu backdrop** (`src/title_bg.c`): the Crusade logo, subtitle,
 stars and a Jerusalem skyline (Tower of David, Church of the Holy
@@ -284,4 +297,20 @@ doesn't stretch the image. The developer drives input manually (default
 mGBA keys: arrows = D-pad, X = A, Z = B, A = L, S = R, Enter = Start,
 Backspace = Select); frames are captured with `grim` for visual checks.
 Fix issues found before starting the next chapter's implementation.
+
+While chapters are playtested one at a time, the Makefile's `TEST_CHAPTER`
+(a `ChapterId`, default `CHAPTER_PRELUDE_1`) makes New Game jump straight to
+that chapter and return to the title when it ends, e.g.
+`make TEST_CHAPTER=CHAPTER_ACT1_BOUILLON`. Build the full chained flow with
+`make TEST_CHAPTER=`.
+
+`DEBUG=1` (the playtest default) adds a frame-pacing HUD in the top-right
+during gameplay: `FPS` (frames presented last second), `DROP` (total missed
+VBlanks) and `CPU` (peak share of the 228-line frame used by game logic).
+Gameplay loops call `vsync_wait()` (`include/debug.h`), which is plain
+`VBlankIntrWait()` in release builds (`make DEBUG=0 TEST_CHAPTER=`).
+Changing `DEBUG` or `TEST_CHAPTER` rebuilds automatically (flags stamp in
+`build/`). Scroll registers and OAM are only written right after VBlank
+(`camera_commit()`, `oam_pool_flush()`) to avoid tearing; judder with a
+steady FPS 60 / DROP 0 is host-side (e.g. a VM display at 120 Hz).
 
