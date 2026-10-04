@@ -10,6 +10,7 @@
 #include "audio.h"
 #include "input.h"
 #include "debug.h"
+#include "intro.h"
 
 int main(void) {
     irq_init(NULL);
@@ -55,12 +56,13 @@ int main(void) {
         /* Playtest build: run only the chapter under test (see Makefile). */
         if (choice == TITLE_NEW_GAME) g_save.chapterId = TEST_CHAPTER;
         switch (g_save.chapterId) {
-            case CHAPTER_PRELUDE_1:     prelude1_run(); break;
+            case CHAPTER_PRELUDE_1:     intro_run(); prelude1_run(); break;
             case CHAPTER_ACT1_BOUILLON: act1_bouillon_run(); break;
             default: break;
         }
 #else
         if (g_save.chapterId <= CHAPTER_PRELUDE_1) {
+            intro_run();
             prelude1_run();
             g_save.chapterId = CHAPTER_ACT1_BOUILLON;
             save_write();

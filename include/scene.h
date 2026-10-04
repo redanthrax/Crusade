@@ -37,6 +37,9 @@ typedef enum {
     SPK_GUIDE,
     SPK_IDA,
     SPK_RETAINER,
+    SPK_THEO,          /* prelude 1 pilgrims */
+    SPK_SILVANUS,
+    SPK_ANNA,
     SPK_COUNT
 } SpeakerId;
 
@@ -60,5 +63,10 @@ extern const char *const g_textBank[];
  * its own input/VBlank loop). Draws the bottom text box via the shared
  * 8x8 font tileset. Returns when a chain reaches SCENE_END. */
 void scene_run(const SceneScriptEntry *table, u16 entryId);
+
+/* Optional callback run once per frame while scene_run() waits on a page
+ * (after the sprites are presented, before they are rendered again), so a
+ * map can keep ambient actors moving under dialogue. NULL to clear. */
+void scene_set_frame_hook(void (*hook)(void));
 
 #endif /* CRUSADE_SCENE_H */

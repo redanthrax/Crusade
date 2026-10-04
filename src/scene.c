@@ -14,7 +14,16 @@ const char *const g_speakerNames[SPK_COUNT] = {
     [SPK_GUIDE]    = "Guide",
     [SPK_IDA]      = "Countess Ida",
     [SPK_RETAINER] = "Retainer",
+    [SPK_THEO]     = "Theo",
+    [SPK_SILVANUS] = "Silvanus",
+    [SPK_ANNA]     = "Anna",
 };
+
+static void (*s_frameHook)(void);
+
+void scene_set_frame_hook(void (*hook)(void)) {
+    s_frameHook = hook;
+}
 
 static BOOL flags_satisfied(u8 flagsRequired) {
     if (flagsRequired == 0) return TRUE;
@@ -43,6 +52,7 @@ void scene_run(const SceneScriptEntry *table, u16 entryId) {
                 /* Present scroll + sprites in VBlank, then prepare the next. */
                 camera_commit();
                 oam_pool_flush();
+                if (s_frameHook) s_frameHook();
                 render_actors_to_oam();
                 ui_textbox_tick();
                 input_poll();

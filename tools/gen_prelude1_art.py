@@ -1,15 +1,17 @@
 #!/usr/bin/env python3
 """Generates the prelude vignette 1 art (Holy Sepulchre courtyard, 4th c.):
 
-  graphics/spr_guide.png    player: pilgrim guide, hooded cloak + staff
-  graphics/spr_pilgrim.png  procession pilgrims (3 palette variants)
+  graphics/spr_guide.png    player: pilgrim guide, black cowl, oxblood robe, cross staff
+  graphics/spr_pilgrim.png  pilgrims (variants 0-2 procession, 3-5 crowd)
   graphics/spr_looter.png   looter in a short tunic
   graphics/p1_tiles.png     16x16 metatile sheet (8 per row) for the map
   data/maps/map_prelude1_layout.c   metatile layer + collision flags
 
-Sprite sheets are 64x96: columns = walk frames 0-3, rows = facing
-down / up / right (left is the right row h-flipped at runtime). Each frame
-is 16x32 = 8 tiles; grit's -Mw2 -Mh4 keeps every frame's tiles contiguous.
+Sprite sheets have columns = walk frames 0-3, rows = facing down / up /
+right (left is the right row h-flipped at runtime). Pilgrim and looter
+sheets are 64x96 with 16x32 frames (8 tiles, grit -Mw2 -Mh4); the guide is
+128x96 with 32x32 frames (16 tiles, grit -Mw4 -Mh4), so each frame's tiles
+stay contiguous.
 
 Rerun after edits:  python3 tools/gen_prelude1_art.py
 """
@@ -331,6 +333,242 @@ def sheet(down, up, side, lower, cuff, with_staff=False):
     return out
 
 
+# --- Guide: grim hooded ascetic, 32x32 frames. Own body art (pilgrims keep
+# ROBE_*). Same palette index layout: M/m/k = black wool cloak (dark/mid/
+# lit), R/r/l = oxblood under-robe, b = rope, g = tarnished brass,
+# W = eye glints in the faceless shadow of the hood.
+# Lit from the upper left: front/back views are drawn as a left half that
+# is mirrored, with the right half pushed one shade darker.
+
+GW = 32  # guide frame width; the actor's 16px footprint is cols 8-23
+
+
+def _shade_mirror(half, dark=None):
+    dark = dark or {"k": "m", "m": "M", "M": "m"}
+    rows = []
+    for row in half:
+        assert len(row) == 16, row
+        rows.append(row + "".join(dark.get(ch, ch) for ch in row[::-1]))
+    return rows
+
+
+def _patch(rows, y, x, s):
+    rows[y] = rows[y][:x] + s + rows[y][x + len(s):]
+
+
+GUIDE_DOWN = _shade_mirror([
+    "...............o",  # 0
+    ".............ook",
+    "............okkm",
+    "...........okkmm",
+    "..........okkmmm",
+    "..........okmmmM",  # 5
+    "..........okmmMo",
+    "..........okmMoo",
+    "..........okmMoo",
+    "..........okmMoo",
+    "..........okmMWo",  # 10
+    "..........okmMoo",
+    ".........okkmMoo",
+    "........okkmmMMo",
+    ".......okkmmmmMM",
+    ".......okmmmmmMR",  # 15
+    ".......okmmmmmMR",
+    "......okkmmmmmMg",
+    "......okmmmmmMgg",
+    "......okmmkmmMRg",
+    "......okmMkmmMbb",  # 20
+    "......okmMkmmMRb",
+    "......okmMkmmMRb",
+    ".....okkmMkmmMRr",
+    ".....okmmMkmmMRr",
+    ".....okmmMkmmmMR",  # 25
+    ".....okmmMkmmmMR",
+], dark={"k": "m", "m": "M", "M": "m", "R": "r"})
+# asymmetric touches: beard tip off-centre, rope tail hangs on one side
+_patch(GUIDE_DOWN, 21, 16, "r")
+_patch(GUIDE_DOWN, 22, 16, "r")
+_patch(GUIDE_DOWN, 23, 15, "b")
+
+GUIDE_UP = _shade_mirror([
+    "...............o",  # 0
+    ".............ook",
+    "............okkm",
+    "...........okkmm",
+    "..........okkmmm",
+    "..........okkmmm",  # 5
+    "..........okmmmm",
+    "..........okmmmm",
+    "..........okkmmm",
+    "..........okkmmm",
+    "..........okkmmm",  # 10
+    "..........okkmmM",
+    ".........okkmmMm",
+    "........okkmmmmM",
+    ".......okkmmmmmm",
+    ".......okmmmmmmm",  # 15
+    ".......okmmmmmmm",
+    "......okkmmmmmmm",
+    "......okmmmmmmmm",
+    "......okmmmmmmmm",
+    "......okmmmmmmmm",  # 20
+    "......okmMmmmmmm",
+    "......okmMmmmmmm",
+    ".....okkmMmmmmmm",
+    ".....okmmMmmmmmm",
+    ".....okmmMmmmmmm",  # 25
+    ".....okmmMmmmmmm",
+], dark={"k": "m", "m": "M"})
+# oxblood cross stitched on the back of the cloak
+for _y in range(15, 23):
+    _patch(GUIDE_UP, _y, 15, "RR")
+_patch(GUIDE_UP, 17, 12, "RRRRRRRR")
+
+GUIDE_SIDE = [
+    ".............ooo................",  # 0
+    "............okmmoo..............",
+    "...........okkmmmmo.............",
+    "..........okkmmmmmMo............",
+    "..........okmmmmmmMMo...........",
+    ".........okkmmmmmMMooo..........",  # 5
+    ".........okmmmmmmMMoooo.........",
+    ".........okmmmmmmMMoooo.........",
+    ".........okmmmmmmMMooWo.........",
+    ".........okmmmmmmMMoooo.........",
+    ".........okmmmmmmMMMooo.........",  # 10
+    ".........okkmmmmmMMMMoo.........",
+    "........okkmmmmmmMMMMo..........",
+    "........okmmmmmmmMMMMo..........",
+    ".......okkmmmmmmmMMMMMo.........",
+    ".......okmmmmmmmmMMMRo..........",  # 15
+    ".......okmmmmmmmmMMMRo..........",
+    "......okkmmmmmmmmMMbbo..........",
+    "......okmmmmmmmmmMMRbo..........",
+    "......okmmmmmmmmmMMRbo..........",
+    ".....okkmmmmmmmmmMMRro..........",  # 20
+    ".....okmmMmmmmmmmMMRrlo.........",
+    "....okkmmMmmmmmmmMMRrlo.........",
+    "....okmmmMmmmmmmmMMRrlo.........",
+    "...okkmmmMmmmmmmmMMRrlo.........",
+    "...okmmmMmmmmmmmmMMRrlo.........",  # 25
+    "...okmmmMmmmmmmmmMMRrlo.........",
+]
+
+
+def _row_extent(c, y):
+    xs = [x for x in range(c.w) if c.get(x, y) not in (T, None)]
+    return min(xs), max(xs)
+
+
+def guide_lower(c, upper, d, f):
+    """Ragged cloak hem (rows 27-28) and wrapped feet (rows 29-31), sized
+    to the body's last row."""
+    x0, x1 = _row_extent(upper, 26)
+    sway = (0, -1, 0, 1)[f]
+    c.hline(x0 + 1, x1, 27, MD)
+    c.hline(x0 + 2, x1 - 1, 28, O)
+    c.set(x0, 27, O)
+    c.set(x1, 27, O)
+    if d == "down":
+        c.hline(14 + sway, 18 + sway, 27, RD)
+    elif d == "side":
+        c.hline(x1 - 3, x1, 27, RD)
+    # tattered teeth hanging below the hem, swinging with the stride
+    for x in (x0 + 2 + sway, x0 + 5, x1 - 5, x1 - 2 + sway):
+        c.set(x, 28, MD)
+        c.set(x, 29, O)
+    if d in ("down", "up"):
+        feet = {0: [(12, 2), (18, 2)], 2: [(12, 2), (18, 2)],
+                1: [(12, 3), (18, 1)], 3: [(12, 1), (18, 3)]}[f]
+        for x, ln in feet:
+            c.rect(x, 29, x + 2, 29 + ln, LEATH)
+            c.hline(x, x + 2, 29 + ln, O)
+            c.vline(x - 1, 29, 29 + ln, O)
+            c.vline(x + 2, 29, 29 + ln, O)
+    else:
+        xs = (11, 17) if f in (1, 3) else (14,)
+        for x in xs:
+            c.rect(x, 29, x + 4, 30, LEATH)
+            c.hline(x, x + 4, 30, O)
+            c.set(x - 1, 29, O)
+            c.set(x + 4, 29, O)
+
+
+def cross_staff(c, x, y0, y1, hand_y, pennon=1):
+    """Gnarled staff topped with a crossbar and a ragged oxblood pennon
+    hanging on the `pennon` side (+1 right, -1 left), gripped at hand_y."""
+    bar = y0 + 2
+    pts = {(x, y): WOOD for y in range(y0, y1)}
+    for y in range(y0 + 7, y1, 5):  # knots
+        pts[(x, y)] = LEATH
+    for dx in (-2, -1, 1, 2):
+        pts[(x + dx, bar)] = WOOD
+    px = x + 2 * pennon
+    for i, y in enumerate(range(bar + 1, bar + 6)):
+        pts[(px, y)] = RM if i < 4 else RD
+        if i < 3:
+            pts[(px - pennon, y)] = (RL, RM, RD)[i]
+    pts[(px + pennon, bar + 1)] = RD
+    for (px_, py_), col in pts.items():
+        c.set(px_, py_, col)
+    for (px_, py_) in pts:
+        for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+            nx, ny = px_ + dx, py_ + dy
+            if (nx, ny) not in pts and c.get(nx, ny) == T:
+                c.set(nx, ny, O)
+    # hand: knuckles wrap the shaft
+    c.rect(x - 1, hand_y, x + 2, hand_y + 2, SK)
+    c.hline(x - 1, x + 2, hand_y + 1, SKS)
+    for xx in (x - 2, x + 2):
+        for yy in (hand_y, hand_y + 1):
+            if c.get(xx, yy) in (T, MD):
+                c.set(xx, yy, O)
+
+
+def guide_side_arm(c, f):
+    """Forward arm (side view) reaching out to the staff; returns hand y."""
+    hy = 17 + (0, 1, 0, 1)[f]
+    for x in range(17, 27):
+        y = 15 + (x - 17) * (hy - 15) // 9
+        c.set(x, y - 1, O if c.get(x, y - 1) == T else c.get(x, y - 1))
+        c.set(x, y, ML)
+        c.vline(x, y + 1, y + 3, MM)
+        c.set(x, y + 3, O)
+    c.vline(27, hy - 1, hy + 3, O)
+    return hy
+
+
+def guide_frame(d, f):
+    body = {"down": GUIDE_DOWN, "up": GUIDE_UP, "side": GUIDE_SIDE}[d]
+    assert all(len(r) == GW for r in body), d
+    c = Canvas(GW, 32)
+    upper = Canvas(GW, 32)
+    upper.stamp(body, LEG, 0, 0)
+    guide_lower(c, upper, d, f)
+    hand_y = None
+    if d == "side":
+        hand_y = guide_side_arm(upper, f)
+    b = BOB[f]
+    if b:
+        c.blit(upper, 0, 0, key=T)  # fills the row the bob lifts away from
+    c.blit(upper, 0, b, key=T)
+    if d == "down":
+        cross_staff(c, 4, 1 + b, 31, 17 + b, pennon=-1)
+    elif d == "up":
+        cross_staff(c, 27, 1 + b, 31, 17 + b, pennon=1)
+    else:
+        cross_staff(c, 28, 1 + b, 31, hand_y + b, pennon=-1)
+    return c
+
+
+def guide_sheet():
+    out = Canvas(GW * 4, 96)
+    for row, d in enumerate(("down", "up", "side")):
+        for f in range(4):
+            out.blit(guide_frame(d, f), f * GW, row * 32)
+    return out
+
+
 def char_palette(robe, mantle, skin=("#a8684a", "#e0a47c"),
                  hair="#3c2618", trim="#c8a050"):
     return [
@@ -342,11 +580,17 @@ def char_palette(robe, mantle, skin=("#a8684a", "#e0a47c"),
 
 
 def gen_sprites():
-    guide = sheet(ROBE_DOWN, ROBE_UP, ROBE_SIDE, robe_lower, SK, with_staff=True)
-    write_png(os.path.join(GFX, "spr_guide.png"), guide, char_palette(
-        robe=("#a89878", "#d8ccb0", "#f0e8d4"),
-        mantle=("#4a2e22", "#6e4632", "#946048"),
-        trim="#b08840"))
+    guide = guide_sheet()
+    gpal = char_palette(
+        robe=("#2e1216", "#4e1e20", "#6e2e28"),
+        mantle=("#1e1a24", "#36303e", "#5a5268"),
+        skin=("#6a4434", "#a87a5c"), hair="#7a726a", trim="#7a6448")
+    gpal[O] = rgb("#08060a")
+    gpal[WOOD] = rgb("#5a3e26")
+    gpal[LEATH] = rgb("#2e221c")
+    gpal[WHITE] = rgb("#e8dcc0")
+    gpal[GOLD] = rgb("#b08a3c")
+    write_png(os.path.join(GFX, "spr_guide.png"), guide, gpal)
 
     pilgrim = sheet(ROBE_DOWN, ROBE_UP, ROBE_SIDE, robe_lower, SK)
     pal = char_palette(robe=("#5a5048", "#807468", "#a49888"),
@@ -357,6 +601,16 @@ def gen_sprites():
     pal += char_palette(robe=("#4c5440", "#6c765a", "#909a78"),
                         mantle=("#5a5a52", "#848070", "#aaa492"),
                         hair="#6a6058", skin=("#b07858", "#e8b490"))
+    # Variants 3-5: muted courtyard crowd, so the procession reads apart.
+    pal += char_palette(robe=("#5a5448", "#767060", "#928c7a"),
+                        mantle=("#423c32", "#5a5244", "#746a58"))
+    pal += char_palette(robe=("#24222a", "#38343e", "#4e4a54"),
+                        mantle=("#1a181e", "#2a2830", "#403c46"),
+                        skin=("#7a4c36", "#b08060"), hair="#1a1414",
+                        trim="#6a5a40")
+    pal += char_palette(robe=("#5e4630", "#7a5c40", "#987656"),
+                        mantle=("#3e3a44", "#56505c", "#726a78"),
+                        skin=("#7a4a30", "#b07a56"))
     write_png(os.path.join(GFX, "spr_pilgrim.png"), pilgrim, pal)
 
     looter = sheet(TUNIC_DOWN, TUNIC_UP, TUNIC_SIDE, tunic_lower, SK)

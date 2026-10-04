@@ -25,6 +25,12 @@ command, and piety, not a secret destiny.
    Sepulchre courtyard + colonnade. Tutorial: d-pad move, A interact, B run,
    keep a pilgrim procession bunched (herd mechanic: stragglers nudged back
    into a radius). Non-lethal scrap: shove/stun verb only, no sword.
+   Scripted open (procession walks in; named pilgrims Silvanus the boastful
+   merchant, Theo the curious youth, Anna the old woman from Gaul), then
+   story beats keyed to progress up the courtyard: Theo strays to the well
+   (A to recall), a cutpurse snatches Silvanus's silver (B-run chase, A
+   shove, return the purse), Theo strays to the fig baskets, then the group
+   files through the Anastasis door into a fade and narrated outro.
 2. **After 637 (walked time-jump)** — One scrolling corridor map, auto-walk
    with periodic player-confirmed steps (press A to advance). Vignettes at
    waypoints: a tolerant administrator waving pilgrims through a gate
@@ -278,6 +284,18 @@ palette bank 0); `map_load()` overwrites them when gameplay starts. The
 dawn sky is an HDMA gradient on the backdrop colour (DMA channel 0,
 restarted every VBlank while a menu is open). The menu cursor is an 8x8
 cross sprite (OBJ tile 16, palette bank 1).
+
+**Opening cinematic** (`src/intro.c`, before Prelude 1 on New Game): six
+narrated scenes for players who don't know the history. They are a 1095 title
+card, a map where the Seljuk lands redden (Manzikert, Alexios's appeal), Urban
+II at Clermont ("Deus vult"), Godfrey kneeling in the chapel, the map again
+with his route drawing itself from Bouillon to Jerusalem, and a "Hierusalem"
+card leading into the prelude. The art comes from `tools/gen_intro_art.py`
+(coastlines: Natural Earth 1:50m, public domain, cropped in
+`graphics/src/geo/`). Each image is a strip of 240x160 frames sharing one
+palette and at most 512 tiles. It is shown on BG0 (CBB0/SBB16, palette bank 0)
+with black brightness fades, palette animation and map-entry swaps. A
+advances; START skips.
 
 **Gothic type** (`src/gothic.c`): the logo and subtitle use a
 blackletter face rasterised from UnifrakturCook Bold (SIL OFL 1.1, source

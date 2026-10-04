@@ -24,12 +24,12 @@ static void write_obj(OBJ_ATTR *obj, Actor *a) {
     u16 attr2 = ATTR2_PALBANK(d->palbank + a->palVariant) | ATTR2_PRIO(1);
 
     /* Off-screen: hide rather than let coordinates wrap around. */
-    if (sx < -16 || sx > SCREEN_WIDTH || sy < -16 || sy > SCREEN_HEIGHT + 16) {
+    if (sx < -24 || sx > SCREEN_WIDTH + 8 || sy < -16 || sy > SCREEN_HEIGHT + 16) {
         obj_hide(obj);
         return;
     }
 
-    if (!d->tall) {
+    if (d->size == SPRSZ_16x16) {
         obj_set_attr(obj, ATTR0_SQUARE, ATTR1_SIZE_16x16, attr2 | d->tileBase);
         obj_set_pos(obj, sx, sy);
         return;
@@ -49,9 +49,15 @@ static void write_obj(OBJ_ATTR *obj, Actor *a) {
     } else {
         a->animTick = 0;
     }
-    obj_set_attr(obj, ATTR0_TALL, ATTR1_SIZE_16x32 | flip,
-                 attr2 | (d->tileBase + (row * 4 + frame) * 8));
-    obj_set_pos(obj, sx, sy - 16);
+    if (d->size == SPRSZ_32x32) {
+        obj_set_attr(obj, ATTR0_SQUARE, ATTR1_SIZE_32x32 | flip,
+                     attr2 | (d->tileBase + (row * 4 + frame) * 16));
+        obj_set_pos(obj, sx - 8, sy - 16);
+    } else {
+        obj_set_attr(obj, ATTR0_TALL, ATTR1_SIZE_16x32 | flip,
+                     attr2 | (d->tileBase + (row * 4 + frame) * 8));
+        obj_set_pos(obj, sx, sy - 16);
+    }
 }
 
 void render_actors_to_oam(void) {
