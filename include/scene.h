@@ -40,6 +40,9 @@ typedef enum {
     SPK_THEO,          /* prelude 1 pilgrims */
     SPK_SILVANUS,
     SPK_ANNA,
+    SPK_GODFREY,       /* act 1 */
+    SPK_BALDWIN,
+    SPK_WICHER,
     SPK_COUNT
 } SpeakerId;
 

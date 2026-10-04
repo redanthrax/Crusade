@@ -1,0 +1,2 @@
+# 16x32 frames, one 16-colour palette.
+-gt -gB4 -Mw2 -Mh4 -p -pn16

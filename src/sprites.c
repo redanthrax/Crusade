@@ -5,6 +5,10 @@
 #include "spr_guide.h"
 #include "spr_pilgrim.h"
 #include "spr_looter.h"
+#include "spr_knight.h"
+#include "spr_ida.h"
+#include "spr_wicher.h"
+#include "spr_pell.h"
 
 #define TILE_GUIDE   32
 #define TILE_PILGRIM 224
@@ -12,6 +16,14 @@
 #define PAL_GUIDE    2
 #define PAL_PILGRIM  3
 #define PAL_LOOTER   9 /* after the 6 pilgrim banks (3-8) */
+#define TILE_KNIGHT  32
+#define TILE_IDA     352
+#define TILE_WICHER  448
+#define TILE_PELL    544
+#define PAL_KNIGHT   2 /* + palVariant: 2 Godfrey, 3 Baldwin */
+#define PAL_IDA      4
+#define PAL_WICHER   5
+#define PAL_PELL     6
 
 const SpriteDesc g_spriteDesc[SPR_COUNT] = {
     [SPR_DEFAULT]   = { SPRITE_TILE_PLAYER, 0, SPRSZ_16x16 },
@@ -21,6 +33,10 @@ const SpriteDesc g_spriteDesc[SPR_COUNT] = {
     [SPR_GUIDE]     = { TILE_GUIDE,   PAL_GUIDE,   SPRSZ_32x32 },
     [SPR_PILGRIM]   = { TILE_PILGRIM, PAL_PILGRIM, SPRSZ_16x32 },
     [SPR_LOOTER]    = { TILE_LOOTER,  PAL_LOOTER,  SPRSZ_16x32 },
+    [SPR_KNIGHT]    = { TILE_KNIGHT,  PAL_KNIGHT,  SPRSZ_32x32, SPRF_COMBAT },
+    [SPR_IDA]       = { TILE_IDA,     PAL_IDA,     SPRSZ_16x32 },
+    [SPR_WICHER]    = { TILE_WICHER,  PAL_WICHER,  SPRSZ_16x32 },
+    [SPR_PELL]      = { TILE_PELL,    PAL_PELL,    SPRSZ_16x32, SPRF_FIXED },
 };
 
 /* Latin cross menu cursor; '1' = gold, shadow is derived at +1,+1. */
@@ -37,6 +53,11 @@ static const char *const s_alertArt[8] = {
 static const char *const s_purseArt[8] = {
     "...11...", "..2112..", ".266662.", "26777762",
     "26677662", "26666662", ".266662.", "..2222..",
+};
+
+static const char *const s_sparkArt[8] = {
+    "...1....", ".1.3..1.", "..131...", "1333331.",
+    "..131...", ".1.3.1..", "...1....", "........",
 };
 
 static void load_art(int tile, const char *const art[8]) {
@@ -70,6 +91,7 @@ static void load_cursor(void) {
 static void load_icons(void) {
     load_art(SPRITE_TILE_EMOTE_ALERT, s_alertArt);
     load_art(SPRITE_TILE_PURSE, s_purseArt);
+    load_art(SPRITE_TILE_SPARK, s_sparkArt);
     pal_obj_bank[SPRITE_PALBANK_UI][3] = BGR15(30, 29, 26);
     pal_obj_bank[SPRITE_PALBANK_UI][4] = BGR15(24, 4, 3);
     pal_obj_bank[SPRITE_PALBANK_UI][6] = BGR15(14, 8, 4);
@@ -92,4 +114,15 @@ void sprites_load_prelude1(void) {
     memcpy16(pal_obj_bank[PAL_GUIDE], spr_guidePal, 16);
     memcpy16(pal_obj_bank[PAL_PILGRIM], spr_pilgrimPal, 16 * PILGRIM_VARIANTS);
     memcpy16(pal_obj_bank[PAL_LOOTER], spr_looterPal, 16);
+}
+
+void sprites_load_act1(void) {
+    memcpy32(&tile_mem_obj[0][TILE_KNIGHT], spr_knightTiles, spr_knightTilesLen / 4);
+    memcpy32(&tile_mem_obj[0][TILE_IDA], spr_idaTiles, spr_idaTilesLen / 4);
+    memcpy32(&tile_mem_obj[0][TILE_WICHER], spr_wicherTiles, spr_wicherTilesLen / 4);
+    memcpy32(&tile_mem_obj[0][TILE_PELL], spr_pellTiles, spr_pellTilesLen / 4);
+    memcpy16(pal_obj_bank[PAL_KNIGHT], spr_knightPal, 32);
+    memcpy16(pal_obj_bank[PAL_IDA], spr_idaPal, 16);
+    memcpy16(pal_obj_bank[PAL_WICHER], spr_wicherPal, 16);
+    memcpy16(pal_obj_bank[PAL_PELL], spr_pellPal, 16);
 }

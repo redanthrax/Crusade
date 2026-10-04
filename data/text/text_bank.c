@@ -115,16 +115,57 @@ const char *const g_textBank[TEXT_COUNT] = {
         "would walk it.",
 
     [TEXT_A1_INTRO] =
-        "Bouillon. Years later. "
-        "Godfrey trains in the yard at dawn.",
-    [TEXT_A1_MOTHER] =
-        "Strength without devotion is only violence, my son.",
-    [TEXT_A1_DUEL_CHALLENGE] =
-        "Let's see what the tutors taught you, Godfrey.",
+        "Bouillon, in the Ardennes. Spring, in the year of Our Lord 1096.",
+    [TEXT_A1_INTRO_PLEDGE] =
+        "Godfrey, Duke of Lower Lorraine, has taken the cross. To pay for the march he has pledged his castle to the Bishop of Liege.",
+    [TEXT_A1_INTRO_YARD] =
+        "The road east opens with the summer. Until then, there is the yard.",
+    [TEXT_A1_WICHER_HELLO] =
+        "Morning, my lord duke. The pells are set.",
+    [TEXT_A1_WICHER_PELLS] =
+        "They won't strike back. But they won't flatter you either.",
+    [TEXT_A1_HINT_SWORD] =
+        "Press A to swing your sword. Beat down all three pells.",
+    [TEXT_A1_PELLS_DONE] =
+        "Straw doesn't bleed, my lord. Men do. You want a partner who hits back.",
+    [TEXT_A1_BALDWIN_HELLO] =
+        "Then you're in luck! Good morning, brother.",
+    [TEXT_A1_BALDWIN_GODFREY1] =
+        "Baldwin. Shouldn't you be packing?",
+    [TEXT_A1_BALDWIN_SOLD] =
+        "Packed days ago. They say you sold Bouillon to the bishop to pay for all this.",
+    [TEXT_A1_BALDWIN_GODFREY2] =
+        "Pledged, not sold. I'll redeem it when I come home.",
+    [TEXT_A1_BALDWIN_DARE] =
+        "If you come home. Into the ring, then. First to three touches.",
+    [TEXT_A1_HINT_DUEL] =
+        "Baldwin guards against a swing from the front. Strike while his sword is raised, or just after his blow. Hold B to step clear.",
+    [TEXT_A1_DUEL_LOSE] =
+        "That's three to me! Again, brother.",
+    [TEXT_A1_DUEL_LOSE_WICHER] =
+        "Watch his sword arm, my lord. It rises before every blow.",
     [TEXT_A1_DUEL_WIN] =
-        "Godfrey holds his footing.\n"
-        "The yard falls quiet.",
-    [TEXT_A1_BLESSING] =
-        "His mother watches from the gate,\n"
-        "and says nothing -- which is approval.",
+        "Enough, enough! You've still got it.",
+    [TEXT_A1_DUEL_WIN_WICHER] =
+        "A duke's blow, that. Save the rest for the road.",
+    [TEXT_A1_IDA_CALL] =
+        "Godfrey.",
+    [TEXT_A1_HINT_IDA] =
+        "Your mother waits at the chapel door. Go to her.",
+    [TEXT_A1_BLESS_GOING] =
+        "You are going, then.",
+    [TEXT_A1_BLESS_CROSS] =
+        "I have taken the cross, Mother. I cannot set it down.",
+    [TEXT_A1_BLESS_RIGHTLY] =
+        "Then carry it rightly. Strength without devotion is only violence, my son.",
+    [TEXT_A1_BLESS_ROAD] =
+        "Not for gold, and not for land. The road to the Sepulchre was open once. Go and make it so again.",
+    [TEXT_A1_BLESS_WILL] =
+        "I will, Mother.",
+    [TEXT_A1_BLESS_SIGN] =
+        "Countess Ida makes the sign of the cross over her son, as she did when he was a boy.",
+    [TEXT_A1_OUTRO] =
+        "In August of 1096, Godfrey of Bouillon rode east with his brother Baldwin and the knights of Lorraine, bound for Constantinople.",
+    [TEXT_A1_OUTRO_2] =
+        "Jerusalem lay three years down the road.",
 };

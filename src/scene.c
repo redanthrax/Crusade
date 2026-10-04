@@ -17,6 +17,9 @@ const char *const g_speakerNames[SPK_COUNT] = {
     [SPK_THEO]     = "Theo",
     [SPK_SILVANUS] = "Silvanus",
     [SPK_ANNA]     = "Anna",
+    [SPK_GODFREY]  = "Godfrey",
+    [SPK_BALDWIN]  = "Baldwin",
+    [SPK_WICHER]   = "Wicher",
 };
 
 static void (*s_frameHook)(void);

@@ -8,6 +8,11 @@
  *   32-223  prelude guide sheet     (32x32, 12 frames x 16 tiles), palbank 2
  *   224-319 prelude pilgrim sheet   (16x32, palbanks 3-8, six variants)
  *   320-415 prelude looter sheet    (16x32, palbank 9)
+ * Act 1 reuses the same range (each act loads its own sheets):
+ *   32-351  knight sheet  (32x32, 20 frames), palbanks 2-3 (Godfrey, Baldwin)
+ *   352-447 Ida           (16x32), palbank 4
+ *   448-543 Wicher        (16x32), palbank 5
+ *   544-575 pell          (16x32, 4 frames), palbank 6
  */
 #ifndef CRUSADE_SPRITES_H
 #define CRUSADE_SPRITES_H
@@ -22,6 +27,7 @@
 /* 8x8 icons in the UI palette bank, loaded with the cursor. */
 #define SPRITE_TILE_EMOTE_ALERT 17 /* "!" speech bubble */
 #define SPRITE_TILE_PURSE       18 /* leather coin purse */
+#define SPRITE_TILE_SPARK       19 /* sword-on-shield clang */
 
 typedef enum {
     SPR_DEFAULT = 0,   /* placeholder square chosen from Actor::kind */
@@ -31,6 +37,10 @@ typedef enum {
     SPR_GUIDE,         /* prelude 1 pilgrim guide (player) */
     SPR_PILGRIM,       /* prelude 1 pilgrims, palVariant 0-2 */
     SPR_LOOTER,        /* prelude 1 looter */
+    SPR_KNIGHT,        /* act 1: palVariant 0 = Godfrey, 1 = Baldwin */
+    SPR_IDA,
+    SPR_WICHER,
+    SPR_PELL,          /* practice pell; frame = Actor::scriptId */
     SPR_COUNT
 } SpriteId;
 
@@ -48,10 +58,19 @@ typedef enum {
  * Left = side row + horizontal flip. The actor's (x,y) is the top-left of
  * its 16x16 footprint (the feet): frames are drawn 16px above it, and
  * 32-wide frames are centred on it (8px to the left). */
+/* SpriteDesc::flags */
+#define SPRF_COMBAT 1  /* rows 3-4: attack windup/strike + hurt frames */
+#define SPRF_FIXED  2  /* single row; frame chosen by Actor::scriptId */
+
+/* SPRF_COMBAT: an AST_ATTACK actor shows its windup frame while timer is
+ * above this, then the strike frame (combat_attack starts at 14). */
+#define ATTACK_STRIKE_FRAMES 10
+
 typedef struct {
     u16 tileBase;
     u8  palbank;
     u8  size;          /* SpriteSize */
+    u8  flags;         /* SPRF_* */
 } SpriteDesc;
 
 extern const SpriteDesc g_spriteDesc[SPR_COUNT];
@@ -62,5 +81,8 @@ void sprites_load_placeholder(void);
 
 /* Loads the prelude 1 character sheets (guide, pilgrims, looter). */
 void sprites_load_prelude1(void);
+
+/* Loads the Act 1 sheets (knight, Ida, Wicher, pell). */
+void sprites_load_act1(void);
 
 #endif /* CRUSADE_SPRITES_H */

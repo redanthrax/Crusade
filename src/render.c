@@ -43,11 +43,28 @@ static void write_obj(OBJ_ATTR *obj, Actor *a) {
         case FACE_RIGHT: row = 2; break;
         default:         row = 0; break;
     }
-    if (a->state == AST_WALK) {
+    if (d->flags & SPRF_FIXED) {
+        row = 0;
+        flip = 0;
+        frame = a->scriptId & 3;
+    } else if (a->state == AST_WALK) {
         a->animTick++;
         frame = (a->animTick >> WALK_FRAME_SHIFT) & 3;
     } else {
         a->animTick = 0;
+    }
+    if (d->flags & SPRF_COMBAT) {
+        BOOL side = row == 2;
+        if (a->state == AST_ATTACK) {
+            int strike = a->timer <= ATTACK_STRIKE_FRAMES;
+            frame = (a->facing == FACE_UP ? 2 : 0) + strike;
+            row = side ? 4 : 3;
+            if (side) frame = strike;
+        } else if (a->state == AST_HITSTUN) {
+            if ((a->timer >> 1) & 1) { obj_hide(obj); return; } /* flicker */
+            row = 4;
+            frame = side ? 3 : 2;
+        }
     }
     if (d->size == SPRSZ_32x32) {
         obj_set_attr(obj, ATTR0_SQUARE, ATTR1_SIZE_32x32 | flip,

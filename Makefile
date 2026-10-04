@@ -32,7 +32,7 @@ MUSIC		:= audio
 # Chapter-at-a-time playtesting: New Game jumps straight to this chapter
 # (a ChapterId from include/scene.h) and returns to the title afterwards.
 # Build the full game flow with: make TEST_CHAPTER=
-TEST_CHAPTER	?= CHAPTER_PRELUDE_1
+TEST_CHAPTER	?= CHAPTER_ACT1_BOUILLON
 
 # DEBUG=1 (playtest default) shows the frame-pacing HUD (include/debug.h).
 # Release ROM: make DEBUG=0 TEST_CHAPTER=

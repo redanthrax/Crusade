@@ -48,8 +48,26 @@ command, and piety, not a secret destiny.
 ### Act 1 — Bouillon
 - Maps: training yard, chapel (mother scene), village (feud NPCs), muster
   field.
-- Enemies: training dummies (scripted, no damage), rival retainer duel (1v1
-  scripted-rules bout), feud raiders (sword + bow).
+- Enemies: training pells (scripted, no damage), sparring duel with his
+  brother Baldwin (1v1 scripted-rules bout), feud raiders (sword + bow).
+- Training-yard opening (spring 1096; implemented in
+  `src/acts/act1_bouillon.c`, art and map from `tools/gen_act1_art.py`):
+  1. Fade in on the castle yard; narration: Godfrey has taken the cross and
+     pledged Bouillon to the Bishop of Liege.
+  2. Wicher, the master-at-arms, sets him at the pells. Sword tutorial (A):
+     each of the three pells takes two blows, leaning with each, and ends
+     battered.
+  3. Baldwin rides in through the gate and teases him about the pledge
+     ("Pledged, not sold"). Both step into the rope ring.
+  4. Duel, first to three touches. Baldwin circles, then closes and raises
+     his sword (a readable windup) before lunging. He turns frontal swings
+     on his shield and answers with a quick riposte; he is open during the
+     windup, after his blow, and from the side. Losing replays the bout
+     with a tip from Wicher. Winning: Arms +1.
+  5. Countess Ida calls from the chapel door. Walk to her and press A for
+     the blessing ("Strength without devotion is only violence"): Piety +1.
+  6. Fade to black; narration: August 1096, the march east to
+     Constantinople.
 - Set-piece: the feud skirmish — defend the village gate, two waves,
   companion #1 (sergeant-at-arms) joins mid-fight.
 - Side mission: recover stolen livestock before the muster deadline
